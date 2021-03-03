@@ -19,6 +19,7 @@ Vagrant.configure("2") do |config|
         box.vm.network "forwarded_port", guest: 8000, host: 8000
         box.vm.network "forwarded_port", guest: 8440, host: 8440
         box.vm.provision "shell", path: "vagrant/centos-7.sh"
+        # common.sh synchronizes latest code, so do not disable it while testing
         box.vm.provision "shell", path: "vagrant/common.sh"
         box.vm.provision "shell", path: "vagrant/ipa-server-1.sh"
     end
