@@ -5,10 +5,14 @@
 #
 class easy_ipa::packetfilter::server
 (
-  String $allow_address_ipv4 = '127.0.0.1',
-  String $allow_address_ipv6 = '::1'
+  Variant[Stdlib::IP::Address::V4,Array[Stdlib::IP::Address::V4]] $allow_address_ipv4 = '127.0.0.1',
+  Variant[Stdlib::IP::Address::V6,Array[Stdlib::IP::Address::V6]] $allow_address_ipv6 = '::1'
 )
 {
+
+  # Convert string parameters to arrays
+  $allow_addresses_ipv4 = any2array($allow_address_ipv4)
+  $allow_addresses_ipv6 = any2array($allow_address_ipv6)
 
   # A hash containing the data for packet filtering rules
   $services = { 'dns'             => { 'tcp' => 53,  'udp' => 53  },
@@ -33,19 +37,24 @@ class easy_ipa::packetfilter::server
       $protocol = $rule[0]
       $dport = $rule[1]
 
-      @firewall { "008 ipv4 accept ${service_name} ${protocol} ${dport}":
-        provider => 'iptables',
-        proto    => $protocol,
-        source   => $allow_address_ipv4,
-        dport    => $dport,
-        tag      => 'default',
+      $allow_addresses_ipv4.each |$addr_v4| {
+        @firewall { "008 ipv4 accept ${service_name} ${protocol} ${dport} from ${addr_v4}":
+          provider => 'iptables',
+          proto    => $protocol,
+          source   => $addr_v4,
+          dport    => $dport,
+          tag      => 'default',
+        }
       }
-      @firewall { "008 ipv6 accept ${service_name} ${protocol}":
-        provider => 'ip6tables',
-        proto    => $protocol,
-        source   => $allow_address_ipv6,
-        dport    => $dport,
-        tag      => 'default',
+
+      $allow_addresses_ipv6.each |$addr_v6| {
+        @firewall { "008 ipv6 accept ${service_name} ${protocol} ${dport} from ${addr_v6}":
+          provider => 'ip6tables',
+          proto    => $protocol,
+          source   => $addr_v6,
+          dport    => $dport,
+          tag      => 'default',
+        }
       }
     }
   }
