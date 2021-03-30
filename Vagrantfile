@@ -15,6 +15,9 @@ Vagrant.configure("2") do |config|
             vb.customize ["modifyvm", :id, "--ioapic", "on"]
             vb.customize ["modifyvm", :id, "--hpet", "on"]
         end
+        # Fix Virtualbox Guest Additions installation issue
+        # https://github.com/hashicorp/vagrant/issues/12095
+        box.vbguest.installer_options = { allow_kernel_upgrade: true }
         box.vm.network "private_network", ip: "192.168.44.35"
         box.vm.network "forwarded_port", guest: 8000, host: 8000
         box.vm.network "forwarded_port", guest: 8440, host: 8440
