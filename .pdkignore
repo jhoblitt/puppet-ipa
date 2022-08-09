@@ -26,6 +26,7 @@
 .envrc
 /inventory.yaml
 /spec/fixtures/litmus_inventory.yaml
+*.log
 /appveyor.yml
 /.editorconfig
 /.fixtures.yml
