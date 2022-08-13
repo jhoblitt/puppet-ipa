@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'easy_ipa', type: :class do
@@ -26,15 +28,15 @@ describe 'easy_ipa', type: :class do
             major: '7',
           },
         },
-        fqdn:     'ipa.rpsec.example.lan',
+        fqdn: 'ipa.rpsec.example.lan',
       }
     end
 
     context 'as bad_val role' do
       let(:params) do
         {
-          ipa_role:                    'bad_val',
-          domain:                      'rspec.example.lan',
+          ipa_role: 'bad_val',
+          domain: 'rspec.example.lan',
         }
       end
 
@@ -113,7 +115,7 @@ describe 'easy_ipa', type: :class do
 
           it { is_expected.to contain_exec('server_install_ipa.rpsec.example.lan').with_command(%r{--no-ssh(?!d)}) }
         end
-      end # configure_ssh
+      end
 
       context 'configure_sshd' do
         context 'true' do
@@ -131,7 +133,7 @@ describe 'easy_ipa', type: :class do
 
           it { is_expected.to contain_exec('server_install_ipa.rpsec.example.lan').with_command(%r{--no-sshd}) }
         end
-      end # configure_sshd
+      end
 
       context 'with idstart out of range' do
         let(:params) do
@@ -202,10 +204,10 @@ describe 'easy_ipa', type: :class do
     context 'as replica' do
       let(:params) do
         {
-          ipa_role:                    'replica',
-          domain:                      'rspec.example.lan',
-          ipa_master_fqdn:             'ipa-server-1.rspec.example.lan',
-          domain_join_password:        'rspecrspec123',
+          ipa_role: 'replica',
+          domain: 'rspec.example.lan',
+          ipa_master_fqdn: 'ipa-server-1.rspec.example.lan',
+          domain_join_password: 'rspecrspec123',
         }
       end
 
@@ -248,7 +250,7 @@ describe 'easy_ipa', type: :class do
 
           it { is_expected.to contain_exec('server_install_ipa.rpsec.example.lan').with_command(%r{--no-ssh(?!d)}) }
         end
-      end # configure_ssh
+      end
 
       context 'configure_sshd' do
         context 'true' do
@@ -266,7 +268,7 @@ describe 'easy_ipa', type: :class do
 
           it { is_expected.to contain_exec('server_install_ipa.rpsec.example.lan').with_command(%r{--no-sshd}) }
         end
-      end # configure_sshd
+      end
 
       context 'missing ipa_master_fqdn' do
         let(:params) do
@@ -296,10 +298,10 @@ describe 'easy_ipa', type: :class do
     context 'as client' do
       let(:params) do
         {
-          ipa_role:                    'client',
-          domain:                      'rspec.example.lan',
-          ipa_master_fqdn:             'ipa-server-1.rspec.example.lan',
-          domain_join_password:        'rspecrspec123',
+          ipa_role: 'client',
+          domain: 'rspec.example.lan',
+          ipa_master_fqdn: 'ipa-server-1.rspec.example.lan',
+          domain_join_password: 'rspecrspec123',
         }
       end
 
@@ -342,7 +344,7 @@ describe 'easy_ipa', type: :class do
 
           it { is_expected.to contain_exec('client_install_ipa.rpsec.example.lan').with_command(%r{--no-ssh(?!d)}) }
         end
-      end # configure_ssh
+      end
 
       context 'configure_sshd' do
         context 'true' do
@@ -360,7 +362,7 @@ describe 'easy_ipa', type: :class do
 
           it { is_expected.to contain_exec('client_install_ipa.rpsec.example.lan').with_command(%r{--no-sshd}) }
         end
-      end # configure_sshd
+      end
 
       context 'missing ipa_master_fqdn' do
         let(:params) do
