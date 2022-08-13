@@ -1,6 +1,5 @@
 # Configures port and redirect overrides for the IPA server web UI.
 class easy_ipa::config::webui {
-
   if $easy_ipa::webui_enable_proxy {
     #ref: https://www.redhat.com/archives/freeipa-users/2016-June/msg00128.html
     $proxy_server_internal_fqdn = $easy_ipa::ipa_server_fqdn
@@ -20,9 +19,9 @@ class easy_ipa::config::webui {
     )
 
     exec { 'semanage-port-http_port_t':
-        command => "semanage port -a -t http_port_t -p tcp ${proxy_https_port}",
-        unless  => "semanage port -l|grep -E \"^http_port_t.*tcp.*${proxy_https_port}\"",
-        path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
+      command => "semanage port -a -t http_port_t -p tcp ${proxy_https_port}",
+      unless  => "semanage port -l|grep -E \"^http_port_t.*tcp.*${proxy_https_port}\"",
+      path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
     }
 
     file_line { 'webui_additional_https_port_listener':
@@ -34,14 +33,14 @@ class easy_ipa::config::webui {
     }
 
     file { '/etc/httpd/conf.d/ipa-rewrite.conf':
-      ensure  => present,
+      ensure  => file,
       replace => true,
       content => template('easy_ipa/ipa-rewrite.conf.erb'),
       notify  => Service['httpd'],
     }
 
     file { '/etc/httpd/conf.d/ipa-webui-proxy.conf':
-      ensure  => present,
+      ensure  => file,
       replace => true,
       content => template('easy_ipa/ipa-webui-proxy.conf.erb'),
       notify  => Service['httpd'],
@@ -50,7 +49,7 @@ class easy_ipa::config::webui {
   }
 
   if $easy_ipa::gssapi_no_negotiate {
-    file_line{'disable_negotiate_headers':
+    file_line { 'disable_negotiate_headers':
       ensure => present,
       path   => '/etc/httpd/conf.d/ipa.conf',
       line   => "  BrowserMatch \"${easy_ipa::gssapi_no_negotiate}\" gssapi-no-negotiate",

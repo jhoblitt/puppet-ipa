@@ -1,17 +1,16 @@
 #
 class easy_ipa::install::client {
-
-  package{ 'ipa-client':
-    ensure => $::easy_ipa::params::ipa_client_package_ensure,
-    name   => $::easy_ipa::params::ipa_client_package_name,
+  package { 'ipa-client':
+    ensure => $easy_ipa::params::ipa_client_package_ensure,
+    name   => $easy_ipa::params::ipa_client_package_name,
   }
 
-  package{ $::easy_ipa::params::kstart_package_name:
+  package { $easy_ipa::params::kstart_package_name:
     ensure => present,
   }
 
   if $easy_ipa::client_install_ldaputils {
-    package { $::easy_ipa::params::ldaputils_package_name:
+    package { $easy_ipa::params::ldaputils_package_name:
       ensure => present,
     }
   }
@@ -35,13 +34,13 @@ class easy_ipa::install::client {
   }
 
   if $easy_ipa::enable_dns_updates {
-    $client_install_cmd_opts_dns_updates = "--enable-dns-updates"
+    $client_install_cmd_opts_dns_updates = '--enable-dns-updates'
   } else {
     $client_install_cmd_opts_dns_updates = ''
   }
 
   if $easy_ipa::enable_hostname {
-    $client_install_cmd_opts_hostname = "--hostname=${::fqdn}"
+    $client_install_cmd_opts_hostname = "--hostname=${facts['networking']['fqdn']}"
   } else {
     $client_install_cmd_opts_hostname = ''
   }
@@ -52,7 +51,7 @@ class easy_ipa::install::client {
     $client_install_cmd_opts_force_join = ''
   }
 
-    $client_install_cmd = "\
+  $client_install_cmd = "\
 /usr/sbin/ipa-client-install \
   --server=${easy_ipa::ipa_master_fqdn} \
   --realm=${easy_ipa::final_realm} \
@@ -72,8 +71,8 @@ class easy_ipa::install::client {
   # Some platforms require "manual" setup as they don't have the freeipa-client
   # package.
   #
-  if $::easy_ipa::params::ipa_client_package_ensure == 'present' {
-    exec { "client_install_${::fqdn}":
+  if $easy_ipa::params::ipa_client_package_ensure == 'present' {
+    exec { "client_install_${facts['networking']['fqdn']}":
       command   => $client_install_cmd,
       timeout   => 0,
       unless    => "cat /etc/ipa/default.conf | grep -i \"${easy_ipa::domain}\"",
@@ -87,7 +86,7 @@ class easy_ipa::install::client {
     contain easy_ipa::install::client::manual
   }
 
-  if $facts['os']['family'] == 'Debian' and $::easy_ipa::mkhomedir {
+  if $facts['os']['family'] == 'Debian' and $easy_ipa::mkhomedir {
     contain easy_ipa::install::client::debian
   }
 
@@ -95,7 +94,7 @@ class easy_ipa::install::client {
     service { 'sssd':
       ensure  => 'running',
       enable  => true,
-      require => Package[$::easy_ipa::params::sssd_package_name],
+      require => Package[$easy_ipa::params::sssd_package_name],
     }
   }
 }

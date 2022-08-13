@@ -1,6 +1,5 @@
 #
 define easy_ipa::helpers::flushcache {
-
   #TODO: nscd should be called on both platforms.
   if $::facts['os']['family'] == 'RedHat' {
     $ipa_fluch_cache_cmd = "\
@@ -28,5 +27,4 @@ fi"
     notify      => Service['sssd'],
     refreshonly => true,
   }
-
 }

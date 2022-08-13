@@ -29,8 +29,7 @@ plan easy_ipa::update_host_keys
   String     $ipa_user,
   String     $ipa_password,
   Boolean    $noop = true,
-)
-{
+) {
   # Part #1: get a kerberos ticket on the IPA server
   if $noop {
     out::message('No-op: get kerberos ticket on the IPA server')
@@ -56,8 +55,7 @@ plan easy_ipa::update_host_keys
     if $noop {
       out::message("No-op: would run \"${ipa_host_mod_cmd}\" on IPA server")
     } else {
-      $ipa_host_mod_resultset = run_command($ipa_host_mod_cmd, $ipa_server, '_catch_errors' => true)
-      ['stdout','stderr'].each |$output| {
+      $ipa_host_mod_resultset = run_command($ipa_host_mod_cmd, $ipa_server, '_catch_errors' => true) ['stdout','stderr'].each |$output| {
         out::message($ipa_host_mod_resultset.first.value[$output])
       }
     }

@@ -7,7 +7,6 @@
 # by failing early rather than later.
 #
 class easy_ipa::params {
-
   case $facts['os']['family'] {
     'RedHat': {
       $ldaputils_package_name = 'openldap-clients'
@@ -35,5 +34,4 @@ class easy_ipa::params {
   $kstart_package_name = 'kstart'
   $sssd_package_name = 'sssd-common'
   $sssdtools_package_name = 'sssd-tools'
-
 }

@@ -5,17 +5,16 @@
 # fragments. This is only supposed to work on RHEL/CentOS.
 #
 class easy_ipa::named {
+  include easy_ipa::params
 
-  include ::easy_ipa::params
-
-  unless $::osfamily == 'RedHat' {
+  unless $facts['os']['family'] == 'RedHat' {
     fail('ERROR: class ::easy_ipa::named supports only RedHat/CentOS')
   }
 
-  $named_conf_d = $::easy_ipa::params::named_conf_d
+  $named_conf_d = $easy_ipa::params::named_conf_d
 
   service { 'named-pkcs11':
-    require => Class['::easy_ipa'],
+    require => Class['easy_ipa'],
   }
 
   file { $named_conf_d:
@@ -23,6 +22,6 @@ class easy_ipa::named {
     owner   => 'root',
     group   => 'named',
     mode    => '0750',
-    require => Class['::easy_ipa'],
+    require => Class['easy_ipa'],
   }
 }

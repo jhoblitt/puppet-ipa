@@ -187,7 +187,7 @@ class easy_ipa (
   Boolean       $install_ipa_server                 = true,
   Boolean       $install_sssd                       = true,
   String        $ip_address                         = '',
-  String        $ipa_server_fqdn                    = $::fqdn,
+  String        $ipa_server_fqdn                    = $facts['networking']['fqdn'],
   String        $ipa_master_fqdn                    = '',
   Boolean       $manage_host_entry                  = false,
   Boolean       $mkhomedir                          = true,
@@ -199,57 +199,53 @@ class easy_ipa (
   Boolean       $webui_force_https                  = false,
   String        $webui_proxy_external_fqdn          = 'localhost',
   String        $webui_proxy_https_port             = '8440',
-)
-{
+) {
+  if $manage {
+    # Include per-OS parameters and fail on unsupported OS
+    include easy_ipa::params
 
-if $manage {
+    if $realm != '' {
+      $final_realm = $realm
+    } else {
+      $final_realm = upcase($domain)
+    }
 
-  # Include per-OS parameters and fail on unsupported OS
-  include ::easy_ipa::params
+    $master_principals = suffix(
+      prefix( [$ipa_server_fqdn],
+        'host/'
+      ),
+      "@${final_realm}"
+    )
 
-  if $realm != '' {
-    $final_realm = $realm
-  } else {
-    $final_realm = upcase($domain)
+    if $domain_join_principal != '' {
+      $final_domain_join_principal = $domain_join_principal
+    } else {
+      $final_domain_join_principal = 'admin'
+    }
+
+    if $domain_join_password != '' {
+      $final_domain_join_password = $domain_join_password
+    } else {
+      $final_domain_join_password = $directory_services_password
+    }
+
+    if $ipa_role == 'client' {
+      $final_configure_dns_server = false
+    } else {
+      $final_configure_dns_server = $configure_dns_server
+    }
+
+    $opt_no_ssh = $configure_ssh ? {
+      true    => '',
+      default => '--no-ssh',
+    }
+
+    $opt_no_sshd = $configure_sshd ? {
+      true    => '',
+      default => '--no-sshd',
+    }
+
+    require easy_ipa::validate_params
+    contain easy_ipa::install
   }
-
-  $master_principals = suffix(
-    prefix(
-      [$ipa_server_fqdn],
-      'host/'
-    ),
-    "@${final_realm}"
-  )
-
-  if $domain_join_principal != '' {
-    $final_domain_join_principal = $domain_join_principal
-  } else {
-    $final_domain_join_principal = 'admin'
-  }
-
-  if $domain_join_password != '' {
-    $final_domain_join_password = $domain_join_password
-  } else {
-    $final_domain_join_password = $directory_services_password
-  }
-
-  if $ipa_role == 'client' {
-    $final_configure_dns_server = false
-  } else {
-    $final_configure_dns_server = $configure_dns_server
-  }
-
-  $opt_no_ssh = $configure_ssh ? {
-    true    => '',
-    default => '--no-ssh',
-  }
-
-  $opt_no_sshd = $configure_sshd ? {
-    true    => '',
-    default => '--no-sshd',
-  }
-
-  require easy_ipa::validate_params
-  contain easy_ipa::install
-}
 }

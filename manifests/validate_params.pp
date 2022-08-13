@@ -1,11 +1,10 @@
 # Validates input configs from init.pp.
 class easy_ipa::validate_params {
-
   case $easy_ipa::ipa_role {
     'client': {}
     'master': {}
     'replica': {}
-    default: {fail('The parameter ipa_role must be set to client, master, or replica.')}
+    default: { fail('The parameter ipa_role must be set to client, master, or replica.') }
   }
 
   if $easy_ipa::ip_address != '' {
@@ -45,7 +44,7 @@ must be populated and at least of length 8."
   if $easy_ipa::ipa_role != 'master' { # if replica or client
 
     # TODO: validate_legacy
-    if $easy_ipa::ipa_master_fqdn == ''{
+    if $easy_ipa::ipa_master_fqdn == '' {
       fail("When creating a ${easy_ipa::ipa_role} the parameter named ipa_master_fqdn cannot be empty.")
     }
 
