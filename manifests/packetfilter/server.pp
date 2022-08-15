@@ -3,6 +3,12 @@
 #
 # Install packet filtering rules for FreeIPA
 #
+# @param allow_address_ipv4
+#   IPv4 address to allow access from.
+#
+# @param allow_address_ipv6
+#   IPv6 address to allow access from.
+#
 class easy_ipa::packetfilter::server (
   Variant[Stdlib::IP::Address::V4,Array[Stdlib::IP::Address::V4]] $allow_address_ipv4 = '127.0.0.1',
   Variant[Stdlib::IP::Address::V6,Array[Stdlib::IP::Address::V6]] $allow_address_ipv6 = '::1'

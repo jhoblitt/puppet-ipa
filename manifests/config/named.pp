@@ -4,12 +4,12 @@
 #
 # Parameters
 # ----------
-# `basename`
+# @param basename
 #     (string) Basename of the configuration fragment, without the ".conf" at the end. Defaults to $title.
-# `content`
+# @param content
 #     (string) The value to pass to the File resource's "content" parameter. For example
 #     template('profile/templates/tsig-key.erb').
-# `notify_named`
+# @param notify_named
 #     (boolean) Whether to restart named-pkcs11 on config changes. Defaults to false.
 #
 define easy_ipa::config::named (

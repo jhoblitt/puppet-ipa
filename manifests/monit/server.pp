@@ -12,7 +12,7 @@
 #   $::servermonitor.
 #
 class easy_ipa::monit::server (
-  String $email = $::servermonitor
+  String $email = $facts['servermonitor'],
 ) {
   @monit::fragment { 'ipa.monit':
     ensure     => 'present',

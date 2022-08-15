@@ -2,7 +2,7 @@
 class easy_ipa::install::server::replica {
   $replica_install_cmd = "\
 /usr/sbin/ipa-replica-install \
-  --principal=${easy_ipa::final_domain_join_principal} \
+  --principal=${easy_ipa::domain_join_principal} \
   --admin-password='${easy_ipa::final_domain_join_password}' \
   ${easy_ipa::install::server::server_install_cmd_opts_hostname} \
   --realm=${easy_ipa::final_realm} \
