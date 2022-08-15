@@ -1,5 +1,9 @@
 #
 class easy_ipa::install::server {
+  if fact('os.family') == 'RedHat' {
+    require easy_ipa::install::server::redhat
+  }
+
   package { $easy_ipa::params::ipa_server_package_name:
     ensure => present,
   }
