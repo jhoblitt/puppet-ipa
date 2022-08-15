@@ -3,7 +3,7 @@
 
 ## Overview
 
-This module will install and configure IPA servers, replicas, and clients. This module was forked from huit-ipa, 
+This module will install and configure IPA servers, replicas, and clients. This module was forked from huit-ipa,
 and refactored with a focus on simplicity and ease of use.
 
 The following features work great:
@@ -63,7 +63,7 @@ class {'::easy_ipa':
 }
 ```
 
-Add monitoring with [monit](https://mmonit.com/monit/). Depends on the 
+Add monitoring with [monit](https://mmonit.com/monit/). Depends on the
 [puppetfinland-monit](https://github.com/Puppet-Finland/monit) module:
 
 ```
@@ -93,9 +93,9 @@ Add a backup job to cron:
       email     => 'admin@domain.com',
     }
 ```
-Backup type can be 'full' or 'data'. Timestamp is either true (default) or 
-false. A wrapper script is used as ipa-backup always adds a timestamp to the 
-backup directory, which makes no sense if an external system (e.g. Bacula) is 
+Backup type can be 'full' or 'data'. Timestamp is either true (default) or
+false. A wrapper script is used as ipa-backup always adds a timestamp to the
+backup directory, which makes no sense if an external system (e.g. Bacula) is
 handling backup versioning anyways.
 
 Adding a local named.conf configuration fragment:
@@ -120,12 +120,12 @@ ipa_master_fqdn      => 'ipa-server-1.vagrant.example.lan',
 
 ### Support for systems without ipa client packages
 
-This module has partial support configuring ipa clients on operating systems 
-which lack ipa client package and thus the ipa-client-install script. Right now 
-Debian 9 is the only operating system supported in this way. Client-side is 
-configured with the exception that sshd_config is not touched to prevent 
-configuration overlap with other Puppet modules. Adapt the following procedure 
-(adapted from [here](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/identity_management_guide/linux-manual)) 
+This module has partial support configuring ipa clients on operating systems
+which lack ipa client package and thus the ipa-client-install script. Right now
+Debian 9 is the only operating system supported in this way. Client-side is
+configured with the exception that sshd_config is not touched to prevent
+configuration overlap with other Puppet modules. Adapt the following procedure
+(adapted from [here](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/identity_management_guide/linux-manual))
 to complete the enrollment of a host into IPA.
 
 On the IPA master:
@@ -149,8 +149,8 @@ You should now be able to use kinit normally on the enrolled client:
 
     kinit admin
 
-Many of these steps could be automated with exported resources, but getting the 
-Kerberos keytab back to the enrolled would somewhat be challenging. 
+Many of these steps could be automated with exported resources, but getting the
+Kerberos keytab back to the enrolled would somewhat be challenging.
 
 ### Mandatory Parameters
 
@@ -272,7 +272,7 @@ Name of the sssd package.
 #### `sssdtools_package_name`
 Name of the sssdtools package.
 
-####  ̀gssapi_no_negotiate ̀
+####  ̀gssapi_no_negotiate
 
 Suppress setting Negotiate headers based on BrowserMatch. Not sending these headers is useful to work around browsers that do not handle them properly (and incorrectly show authentication popups to users). Example: "Windows". Default undef.
 
@@ -312,16 +312,16 @@ jpuskar/puppet-easy_ipa forked from:
 huit/puppet-ipa - Puppet module that can manage an IPA master, replicas and clients.
 
     Copyright (C) 2013 Harvard University Information Technology
-    
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-    
+
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
