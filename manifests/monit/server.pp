@@ -11,11 +11,9 @@
 #   Email address to send notifications to. Defaults to top-scope variable
 #   $::servermonitor.
 #
-class easy_ipa::monit::server
-(
-  String $email = $::servermonitor
-)
-{
+class easy_ipa::monit::server (
+  String $email = $facts['servermonitor'],
+) {
   @monit::fragment { 'ipa.monit':
     ensure     => 'present',
     modulename => 'easy_ipa',
@@ -24,14 +22,14 @@ class easy_ipa::monit::server
   }
 
   @file { 'ipa.sh':
-    ensure  => 'present',
-    name    => "${::monit::params::fragment_dir}/ipa.sh",
+    ensure  => 'file',
+    name    => "${facts['monit::params::fragment_dir']}/ipa.sh",
     content => template('easy_ipa/ipa.sh.erb'),
     owner   => 'root',
     group   => 'root',
     mode    => '0700',
-    notify  => Class['::monit::service'],
-    require => Class['::monit'],
+    notify  => Class['monit::service'],
+    require => Class['monit'],
     tag     => 'monit',
   }
 }

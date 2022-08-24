@@ -4,25 +4,23 @@
 #
 # Parameters
 # ----------
-# `basename`
+# @param basename
 #     (string) Basename of the configuration fragment, without the ".conf" at the end. Defaults to $title.
-# `content`
+# @param content
 #     (string) The value to pass to the File resource's "content" parameter. For example
 #     template('profile/templates/tsig-key.erb').
-# `notify_named`
+# @param notify_named
 #     (boolean) Whether to restart named-pkcs11 on config changes. Defaults to false.
 #
-define easy_ipa::config::named
-(
+define easy_ipa::config::named (
   String  $content,
   String  $basename = $title,
   Boolean $notify_named = false
-)
-{
-  include ::easy_ipa::params
-  include ::easy_ipa::named
+) {
+  include easy_ipa::params
+  include easy_ipa::named
 
-  $named_conf_d = $::easy_ipa::params::named_conf_d
+  $named_conf_d = $easy_ipa::params::named_conf_d
 
   $notify = $notify_named ? {
     true    => Service['named-pkcs11'],
@@ -31,7 +29,7 @@ define easy_ipa::config::named
   }
 
   file { "${named_conf_d}/${basename}.conf":
-    ensure  => 'present',
+    ensure  => 'file',
     content => $content,
     owner   => 'root',
     group   => 'named',

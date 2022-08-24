@@ -7,13 +7,8 @@
 # by failing early rather than later.
 #
 class easy_ipa::params {
-
   case $facts['os']['family'] {
     'RedHat': {
-      case $facts['os']['release']['major'] {
-        /(6|7|8|30)/:   { }
-        default: { fail('ERROR: unsupported operating system') }
-      }
       $ldaputils_package_name = 'openldap-clients'
       $ipa_client_package_name = 'ipa-client'
       $ipa_client_package_ensure = 'present'
@@ -39,5 +34,4 @@ class easy_ipa::params {
   $kstart_package_name = 'kstart'
   $sssd_package_name = 'sssd-common'
   $sssdtools_package_name = 'sssd-tools'
-
 }

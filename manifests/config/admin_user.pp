@@ -1,6 +1,5 @@
 #
 class easy_ipa::config::admin_user {
-
   $uid_number = $easy_ipa::idstart
   $home_dir_path = '/home/admin'
   $keytab_path = "${home_dir_path}/admin.keytab"
@@ -33,7 +32,7 @@ class easy_ipa::config::admin_user {
   k5login { $k5login_path:
     principals => $easy_ipa::master_principals,
     notify     => File[$k5login_path],
-    require    => File[$home_dir_path]
+    require    => File[$home_dir_path],
   }
 
   # Set keytab for admin user.

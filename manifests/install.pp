@@ -1,11 +1,10 @@
 #
 class easy_ipa::install {
-
   if $easy_ipa::install_epel and $facts['os']['family'] == 'RedHat' {
     ensure_resource(
       'package',
       'epel-release',
-      {'ensure' => 'present'},
+      { 'ensure' => 'present' },
     )
   }
 
@@ -25,7 +24,7 @@ class easy_ipa::install {
   }
 
   if $easy_ipa::install_sssdtools {
-    package { $::easy_ipa::params::sssdtools_package_name:
+    package { $easy_ipa::params::sssdtools_package_name:
       ensure => present,
     }
   }
@@ -36,7 +35,7 @@ class easy_ipa::install {
         'ipa-server-dns',
         'bind-dyndb-ldap',
       ]
-      package{$dns_packages:
+      package { $dns_packages:
         ensure => present,
       }
     }
@@ -49,5 +48,4 @@ class easy_ipa::install {
       contain 'easy_ipa::install::client'
     }
   }
-
 }

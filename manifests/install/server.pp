@@ -1,16 +1,15 @@
 #
 class easy_ipa::install::server {
-
-  package{ $::easy_ipa::params::ipa_server_package_name:
+  package { $easy_ipa::params::ipa_server_package_name:
     ensure => present,
   }
 
-  package{ $::easy_ipa::params::kstart_package_name:
+  package { $easy_ipa::params::kstart_package_name:
     ensure => present,
   }
 
   if $easy_ipa::server_install_ldaputils {
-    package { $::easy_ipa::params::ldaputils_package_name:
+    package { $easy_ipa::params::ldaputils_package_name:
       ensure => present,
     }
   }
@@ -69,7 +68,7 @@ class easy_ipa::install::server {
       $server_install_cmd_opts_forwarders = join(
         prefix(
           $easy_ipa::custom_dns_forwarders,
-          '--forwarder '),
+        '--forwarder '),
         ' '
       )
     }
@@ -106,7 +105,7 @@ class easy_ipa::install::server {
   ensure_resource (
     'service',
     'httpd',
-    {ensure => 'running'},
+    { ensure => 'running' },
   )
 
   contain 'easy_ipa::config::webui'
@@ -121,11 +120,10 @@ class easy_ipa::install::server {
     service { 'sssd':
       ensure  => 'running',
       enable  => true,
-      require => Package[$::easy_ipa::params::sssd_package_name],
+      require => Package[$easy_ipa::params::sssd_package_name],
     }
   }
 
   easy_ipa::helpers::flushcache { "server_${easy_ipa::ipa_server_fqdn}": }
   contain easy_ipa::config::admin_user
-
 }
